@@ -1,0 +1,27 @@
+
+atlas_creado.jpg
+size: 4096,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+caballero
+  rotate: false
+  xy: 2566, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+dino
+  rotate: false
+  xy: 2308, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+paloma
+  rotate: false
+  xy: 2, 2
+  size: 2304, 256
+  orig: 2304, 256
+  offset: 0, 0
+  index: -1

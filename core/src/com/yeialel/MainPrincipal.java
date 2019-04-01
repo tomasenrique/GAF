@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,9 +26,10 @@ public class MainPrincipal extends ApplicationAdapter {
 	private float duracion = 0f; // duracion de la animacion
 
 	private TextureAtlas atlas; // imagen compuesta por varias imagenes(sprite)
-	private TextureRegion textureRegionDude;
-	public SpriteBatch batch; //necesario para poder mostrar la animacion
+	private TextureRegion textureRegionPaloma, textureRegionDino, textureRegionCaballero;
+	private SpriteBatch batchPaloma, batchDino, batchCaballero; //necesario para poder mostrar la animacion y las imagenes
 
+	private Sprite sprite;
 	
 	@Override
 	public void create () {
@@ -36,12 +38,14 @@ public class MainPrincipal extends ApplicationAdapter {
 		bitmapFont_letra = new BitmapFont();
 		bitmapFont_letra.setColor(Color.valueOf("#7BC34A")); // color verde
 
-
-		batch = new SpriteBatch();
 		atlas = new TextureAtlas("atlas_creado.atlas");// de donde cogemos las imagenes
-		TextureRegion region = atlas.findRegion("paloma"); // la imagen que se coge primero
-		textureRegionDude = new TextureRegion(region,0,0,2304,256); // define el tamaño del sprite de la imagen paloma
-		TextureRegion[][] temp = textureRegionDude.split(textureRegionDude.getRegionWidth()/9, textureRegionDude.getRegionHeight());
+
+		//------------------------------------------------------------------------------------------
+		//PALOMA
+		batchPaloma = new SpriteBatch();
+		TextureRegion paloma = atlas.findRegion("paloma"); // la imagen que se coge primero
+		textureRegionPaloma = new TextureRegion(paloma,0,0,2304,256); // define el tamaño del sprite de la imagen paloma
+		TextureRegion[][] temp = textureRegionPaloma.split(textureRegionPaloma.getRegionWidth()/9, textureRegionPaloma.getRegionHeight());
 		textureRegion_Frames = new TextureRegion[temp.length * temp[0].length];
 
 		int index = 0;
@@ -53,9 +57,22 @@ public class MainPrincipal extends ApplicationAdapter {
 		//crea la animacion con un tiempo de duracion para cada imagen cortada o frame
 		animation = new Animation(0.1f, textureRegion_Frames);
 
+		//------------------------------------------------------------------------------------------
+		//DINOSAURIO
+		batchDino = new SpriteBatch();
+		TextureRegion dino = atlas.findRegion("dino");// se toma la imagen dijo del atlas creado
+		textureRegionDino = new TextureRegion(dino, 0,0,256,256);//define tamaño de la imagen y posicion de donde obtener y mostrar
+
+
+		
 
 
 
+		//------------------------------------------------------------------------------------------
+		//CABALLERO
+		batchCaballero = new SpriteBatch();
+		TextureRegion caballero = atlas.findRegion("caballero");
+		textureRegionCaballero = new TextureRegion(caballero, 0,0,256,256);
 	}
 
 	@Override
@@ -69,29 +86,44 @@ public class MainPrincipal extends ApplicationAdapter {
 
 		// letra del titulo
 		spriteBatch_letra.begin();// inicio de la imagen
-		bitmapFont_letra.draw(spriteBatch_letra,"Mis Imagenes", 900, 1000); // posicion del titulo
+		bitmapFont_letra.draw(spriteBatch_letra,"Mis Imagenes", 10, alto - 10); // posicion del titulo
 		spriteBatch_letra.end(); // fin
 
+		//animacion de paloma
 		duracion += Gdx.graphics.getDeltaTime();// tiempo de duracion de la animacion
 		TextureRegion anim = (TextureRegion) animation.getKeyFrame(duracion, true); // repite o no constantemente
-		batch.begin();
-		batch.draw(anim,300,300);
-		batch.end();
+		batchPaloma.begin();
+		batchPaloma.draw(anim,300,300);// posicion de la animacion
+		batchPaloma.end();
 
+		//imagen de dinosaurio
+		batchDino.begin();
+		batchDino.draw(textureRegionDino, 0,0); // posicion de la imagen dinosaurio
+		batchDino.end();
+
+		//imagen del caballero
+		batchCaballero.begin();
+		batchCaballero.draw(textureRegionCaballero, 800,800);// posicion de la imagen del caballero
+		batchCaballero.end();
 
 	}
 	
 	@Override
 	public void dispose () {
+		// aqui se elimina los datos de la memoria grafica
+
 		// para el rexto de titulo
 		spriteBatch_letra.dispose();
 		bitmapFont_letra.dispose();
+
 		//imagen de paloma del sprite atlas
 		atlas.dispose();
-		batch.dispose();
+		batchPaloma.dispose();
 
+		//imagen del dinosaurio
+		batchDino.dispose();
 
-
-
+		//imagen del caballero
+		batchCaballero.dispose();
 	}
 }

@@ -30,6 +30,7 @@ public class MainPrincipal extends ApplicationAdapter {
 	private SpriteBatch batchPaloma, batchDino, batchCaballero; //necesario para poder mostrar la animacion y las imagenes
 
 	private Sprite sprite;
+
 	
 	@Override
 	public void create () {
@@ -57,16 +58,18 @@ public class MainPrincipal extends ApplicationAdapter {
 		//crea la animacion con un tiempo de duracion para cada imagen cortada o frame
 		animation = new Animation(0.1f, textureRegion_Frames);
 
+
 		//------------------------------------------------------------------------------------------
 		//DINOSAURIO
+		/*
 		batchDino = new SpriteBatch();
 		TextureRegion dino = atlas.findRegion("dino");// se toma la imagen dijo del atlas creado
 		textureRegionDino = new TextureRegion(dino, 0,0,256,256);//define tamaño de la imagen y posicion de donde obtener y mostrar
-
-
-		
-
-
+		*/
+		batchDino = new SpriteBatch();
+		TextureRegion dino = atlas.findRegion("dino");
+		sprite = new Sprite(dino,0,0,256,256);
+		sprite.rotate(45.0f);  // no rota la imagen
 
 		//------------------------------------------------------------------------------------------
 		//CABALLERO
@@ -93,13 +96,21 @@ public class MainPrincipal extends ApplicationAdapter {
 		duracion += Gdx.graphics.getDeltaTime();// tiempo de duracion de la animacion
 		TextureRegion anim = (TextureRegion) animation.getKeyFrame(duracion, true); // repite o no constantemente
 		batchPaloma.begin();
-		batchPaloma.draw(anim,300,300);// posicion de la animacion
+		batchPaloma.draw(anim,1000,300);// posicion de la animacion
+
+
 		batchPaloma.end();
 
 		//imagen de dinosaurio
+		/*
 		batchDino.begin();
 		batchDino.draw(textureRegionDino, 0,0); // posicion de la imagen dinosaurio
+		batchDino.end(); */
+		batchDino.begin();
+		batchDino.draw(sprite, 800,0); // posicion de la imagen dinosaurio
 		batchDino.end();
+
+
 
 		//imagen del caballero
 		batchCaballero.begin();

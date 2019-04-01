@@ -1,13 +1,9 @@
 package com.yeialel;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,11 +11,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class MainPrincipal extends ApplicationAdapter {
 
-
-	private BitmapFont bitmapFont_letra; // para escribir texto
-
-
 	private int alto, ancho; // sera para obtener el tamaño de la pantalla
+	private int x, y; // para el cambio de posicion de la animacion
 
 	//Datos para usar la imagen atlas
 	private TextureRegion[] textureRegion_Frames; // cantidad de imagenes por sprite
@@ -35,12 +28,13 @@ public class MainPrincipal extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		//toma el tamaño de la pantalla como referencia
+		alto = Gdx.graphics.getHeight(); // 1080
+		ancho = Gdx.graphics.getWidth(); // 1794
+		x = 1500;
+
 		// servira para almacenar las imagenes, animaciones
 		batch = new SpriteBatch(); // para poner mostrar la imagenes y las animaciones
-
-		// lo siguente servira para poner texto
-		bitmapFont_letra = new BitmapFont();
-		bitmapFont_letra.setColor(Color.valueOf("#7BC34A")); // color verde
 
 		atlas = new TextureAtlas("atlas_creado.atlas");// de donde cogemos todas las imagenes
 
@@ -76,13 +70,8 @@ public class MainPrincipal extends ApplicationAdapter {
 	@Override
 	public void render () {
 		// todo lo que va aqui sera usado en un bucle
-
 		Gdx.gl.glClearColor(1, 1, 1, 1); //Definirá el color del fondo.
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);//indica que el buffer está habilitado para escribir colores
-
-		//toma el tamaño de la pantalla como referencia
-		alto = Gdx.graphics.getHeight(); // 1080
-		ancho = Gdx.graphics.getWidth(); // 1794
 
 		//datos para la animacion de la paloma
 		duracion += Gdx.graphics.getDeltaTime();// tiempo de duracion de la animacion
@@ -92,9 +81,15 @@ public class MainPrincipal extends ApplicationAdapter {
 		// dentro del batch tiene que ir todas las imagenes
 		batch.begin();
 
-		batch.draw(anim,1000,300);//posicion de la animacion de paloma
+		if(x > 0){ // ida
+			batch.draw(anim,x -= 3,300);//posicion de la animacion de paloma
+		}else if(x < ancho){  // retorno
+			batch.draw(anim,x += ancho,300);//posicion de la animacion de paloma
+		}
 		sprite.draw(batch);//imagen de dinosaurio
 		sprite.setPosition(ancho - 700,alto - 300);
+
+
 		batch.draw(textureRegionCaballero, 800,800);// posicion de la imagen del caballero
 
 		batch.end();
@@ -104,9 +99,6 @@ public class MainPrincipal extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		// aqui se elimina los datos de la memoria grafica
-
-		// para el rexto de titulo
-		bitmapFont_letra.dispose();
 
 		atlas.dispose();//limpia de la memoria de la imagen atlas
 		batch.dispose();// limpia la memoria las imagenes de la paloma, dino y caballero
